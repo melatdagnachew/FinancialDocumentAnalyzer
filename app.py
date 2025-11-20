@@ -31,13 +31,6 @@ from PIL import Image
 # OCR engines
 import pytesseract
 
-# Optional heavy dependencies: use if installed
-try:
-    from paddleocr import PaddleOCR
-    PADDLE_AVAILABLE = True
-    paddle_ocr_engine = PaddleOCR(use_angle_cls=True, lang='en')
-except Exception:
-    PADDLE_AVAILABLE = False
 
 # Optional pdf support (only used if installed)
 PDF2IMAGE_AVAILABLE = False
