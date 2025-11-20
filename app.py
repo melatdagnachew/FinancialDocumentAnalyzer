@@ -261,7 +261,7 @@ def field_accuracy(pred_fields, gt_fields):
 
 
 # --- Evaluate Accuracy ---
-if calculate_accuracy and results:
+if "calculate_accuracy" in locals() and calculate_accuracy and results:
     gt_fields = {
         "invoice_number": gt_invoice,
         "date": gt_date,
