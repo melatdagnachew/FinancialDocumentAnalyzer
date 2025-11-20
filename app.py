@@ -87,7 +87,7 @@ def ocr_image(img: np.ndarray, lang: str, tess_config: str) -> str:
 # ---------------------------
 def extract_fields(text: str):
     patterns = {
-        "invoice_number": r"(?:Invoice|Invoice No\.?|Invoice #|Inv)[:\-\s]*([A-Za-z0-9\-/]+)",
+        "invoice_number": "invoice_number": r"(INV[\s:/\-]*[A-Za-z0-9\/\-\s]+)",
         "date": r"([0-3]?\d[\/\-][0-1]?\d[\/\-]\d{2,4}|\d{4}-\d{2}-\d{2}|[A-Za-z]+\s+\d{1,2},\s*\d{4})",
         "total": r"(?:Total|Grand Total|Amount Due)[:\-\s]*\$?([0-9\.,]+)",
         "vendor": r"(?:Vendor|From)[:\-\s]*(.+)"
