@@ -38,35 +38,36 @@ def load_image_from_bytes(b: bytes):
 
     return img
 
+def upscale_image(img):
+    return cv2.resize(img, None, fx=2, fy=2, interpolation=cv2.INTER_CUBIC)
+
+def denoise(img):
+    return cv2.fastNlMeansDenoising(img, h=10)
+
+def sharpen(img):
+    kernel = np.array([[0, -1, 0],
+                       [-1, 5,-1],
+                       [0, -1, 0]])
+    return cv2.filter2D(img, -1, kernel)
 
 # ---------------------------
 # Utility: Preprocessing
 # ---------------------------
-def preprocess_image(img: np.ndarray, deskew: bool = False) -> np.ndarray:
+def preprocess_image(img, deskew=False):
+    img = upscale_image(img)
+
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-    if deskew:
-        coords = np.column_stack(np.where(gray > 0))
-        if len(coords) > 0:
-            rect = cv2.minAreaRect(coords)
-            angle = rect[-1]
-            if angle < -45:
-                angle = -(90 + angle)
-            else:
-                angle = -angle
-
-            (h, w) = gray.shape[:2]
-            M = cv2.getRotationMatrix2D((w // 2, h // 2), angle, 1.0)
-            gray = cv2.warpAffine(gray, M, (w, h),
-                                  flags=cv2.INTER_CUBIC,
-                                  borderMode=cv2.BORDER_REPLICATE)
+    gray = denoise(gray)
+    gray = sharpen(gray)
 
     blur = cv2.GaussianBlur(gray, (3, 3), 0)
+
     th = cv2.adaptiveThreshold(
         blur, 255,
-        cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-        cv2.THRESH_BINARY,
-        11, 2
+        cv2.ADAPTIVE_THRESH_MEAN_C,
+        cv2.THRESH_BINARY_INV,
+        15, 11
     )
 
     return th
