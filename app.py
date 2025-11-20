@@ -292,4 +292,3 @@ if calculate_accuracy:
         st.write(f"- **Field Accuracy**: {fa*100:.2f}%")
         st.write("---")
 
-!jupyter nbconvert --to script app.ipynb
