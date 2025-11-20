@@ -117,6 +117,17 @@ lang = st.sidebar.text_input("Language", "eng")
 psm = st.sidebar.selectbox("PSM Mode", [3, 4, 6, 11, 12], index=2)
 deskew = st.sidebar.checkbox("Deskew Image", False)
 show_raw = st.sidebar.checkbox("Show OCR Text", True)
+# --- Accuracy Sidebar UI ---
+st.sidebar.subheader("Accuracy Evaluation")
+calculate_accuracy = st.sidebar.checkbox("Enable Accuracy Metrics")
+
+gt_text = st.sidebar.text_area("Ground Truth: Full Text", "", disabled=not calculate_accuracy)
+
+gt_invoice = st.sidebar.text_input("GT Invoice Number", "", disabled=not calculate_accuracy)
+gt_date = st.sidebar.text_input("GT Date", "", disabled=not calculate_accuracy)
+gt_total = st.sidebar.text_input("GT Total Amount", "", disabled=not calculate_accuracy)
+gt_vendor = st.sidebar.text_input("GT Vendor Name", "", disabled=not calculate_accuracy)
+
 
 tess_config = f"--psm {psm}"
 
