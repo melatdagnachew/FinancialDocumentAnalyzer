@@ -94,7 +94,8 @@ def extract_fields(text: str):
         "invoice_number": r"(INV[\s:/\-]*[A-Za-z0-9\/\-\s]+)",
         "date": r"(\b\d{1,2}[-\/](Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*[-\/]\d{2,4}\b|\b\d{4}[-\/]\d{2}[-\/]\d{2}\b|\b[0-3]?\d[-\/][0-1]?\d[-\/]\d{2,4}\b|\b[A-Za-z]+\.?\s+\d{1,2},\s*\d{4}\b)",
         "total": r"(?:Total|Grand Total|Amount Due)[:\-\s]*\$?([0-9\.,]+)",
-        "vendor": r"(?:Vendor|From)[:\-\s]*(.+)"
+        "vendor": r"^[A-Za-z].+?(?=INVOICE)"
+
     }
 
     cleaned = "\n".join([l.strip() for l in text.splitlines() if l.strip()])
