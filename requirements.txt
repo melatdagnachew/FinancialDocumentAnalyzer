@@ -1,6 +1,8 @@
 streamlit
 pytesseract
-Pillow
-numpy
 opencv-python-headless
-regex
+pillow
+numpy
+pandas
+paddleocr   
+pdf2image  
