@@ -130,7 +130,7 @@ gt_total = st.sidebar.text_input("GT Total Amount", "", disabled=not calculate_a
 gt_vendor = st.sidebar.text_input("GT Vendor Name", "", disabled=not calculate_accuracy)
 
 
-tess_config = f"--psm {psm}"
+tess_config = f"--oem 3 --psm {psm}"
 
 uploaded_files = st.file_uploader(
     "Upload image(s) or ZIP",
