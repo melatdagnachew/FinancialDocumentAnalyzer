@@ -8,10 +8,7 @@ A deployed Streamlit demo is available, and the source code is included in this 
 
 🌐 Live Demo
 
-👉 Streamlit Cloud App:
-https://financialdocumentanalyzer.streamlit.app/
-
-https://financialdocumentanalyzer-y7b4edpqvgmawqcnlff4he.streamlit.app/
+👉 Streamlit Cloud App: https://financialdocumentanalyzer-y7b4edpqvgmawqcnlff4he.streamlit.app/
 
 🔍 Project Objective
 
