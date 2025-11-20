@@ -1,8 +1,6 @@
 streamlit
-scikit-learn
-pandas
-numpy
-matplotlib
 pytesseract
 Pillow
 numpy
+opencv-python-headless
+regex
