@@ -54,20 +54,24 @@ def sharpen(img):
 # Utility: Preprocessing
 # ---------------------------
 def preprocess_image(img, deskew=False):
-    img = upscale_image(img)
-
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-    gray = denoise(gray)
-    gray = sharpen(gray)
+    # Denoise
+    den = cv2.fastNlMeansDenoising(gray, h=10)
 
-    blur = cv2.GaussianBlur(gray, (3, 3), 0)
+    # Sharpen
+    kernel = np.array([[0,-1,0],[-1,5,-1],[0,-1,0]])
+    sharp = cv2.filter2D(den, -1, kernel)
 
+    # Morphology
+    morph = cv2.morphologyEx(sharp, cv2.MORPH_CLOSE, np.ones((2,2),np.uint8))
+
+    # Adaptive threshold
     th = cv2.adaptiveThreshold(
-        blur, 255,
+        morph, 255,
         cv2.ADAPTIVE_THRESH_MEAN_C,
-        cv2.THRESH_BINARY_INV,
-        15, 11
+        cv2.THRESH_BINARY,
+        15, 8
     )
 
     return th
@@ -88,7 +92,7 @@ def ocr_image(img: np.ndarray, lang: str, tess_config: str) -> str:
 def extract_fields(text: str):
     patterns = {
         "invoice_number": r"(INV[\s:/\-]*[A-Za-z0-9\/\-\s]+)",
-        "date": r"([0-3]?\d[\/\-][0-1]?\d[\/\-]\d{2,4}|\d{4}-\d{2}-\d{2}|[A-Za-z]+\s+\d{1,2},\s*\d{4})",
+        "date": r"(\b\d{1,2}[-\/](Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*[-\/]\d{2,4}\b|\b\d{4}[-\/]\d{2}[-\/]\d{2}\b|\b[0-3]?\d[-\/][0-1]?\d[-\/]\d{2,4}\b|\b[A-Za-z]+\.?\s+\d{1,2},\s*\d{4}\b)",
         "total": r"(?:Total|Grand Total|Amount Due)[:\-\s]*\$?([0-9\.,]+)",
         "vendor": r"(?:Vendor|From)[:\-\s]*(.+)"
     }
