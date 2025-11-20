@@ -209,11 +209,11 @@ if process_btn:
         st.download_button("Download Results", export, "ocr_results.json", "application/json")
 
 
+# ---------------------------
 # Accuracy Metrics
 # ---------------------------
 
 def levenshtein(a, b):
-    """Compute Levenshtein distance."""
     dp = [[0] * (len(b)+1) for _ in range(len(a)+1)]
 
     for i in range(len(a)+1):
@@ -225,15 +225,14 @@ def levenshtein(a, b):
         for j in range(1, len(b)+1):
             cost = 0 if a[i-1] == b[j-1] else 1
             dp[i][j] = min(
-                dp[i-1][j] + 1,      # deletion
-                dp[i][j-1] + 1,      # insertion
-                dp[i-1][j-1] + cost  # substitution
+                dp[i-1][j] + 1,
+                dp[i][j-1] + 1,
+                dp[i-1][j-1] + cost
             )
     return dp[-1][-1]
 
 
 def CER(pred, gt):
-    """Character Error Rate = edit distance / total chars."""
     pred = pred.strip()
     gt = gt.strip()
     if len(gt) == 0:
@@ -242,7 +241,6 @@ def CER(pred, gt):
 
 
 def WER(pred, gt):
-    """Word Error Rate = edit distance / total words."""
     pred_words = pred.strip().split()
     gt_words = gt.strip().split()
     if len(gt_words) == 0:
@@ -251,10 +249,6 @@ def WER(pred, gt):
 
 
 def field_accuracy(pred_fields, gt_fields):
-    """
-    Calculate accuracy for structured fields like:
-    invoice_number, date, total, vendor.
-    """
     total_fields = 0
     correct = 0
 
@@ -265,7 +259,9 @@ def field_accuracy(pred_fields, gt_fields):
 
     return correct / total_fields if total_fields > 0 else 0
 
-if calculate_accuracy:
+
+# --- Evaluate Accuracy ---
+if calculate_accuracy and results:
     gt_fields = {
         "invoice_number": gt_invoice,
         "date": gt_date,
@@ -273,7 +269,7 @@ if calculate_accuracy:
         "vendor": gt_vendor,
     }
 
-    st.subheader("Accuracy Results")
+    st.subheader("🔍 Accuracy Results")
 
     for r in results:
         if "error" in r:
@@ -287,8 +283,7 @@ if calculate_accuracy:
         fa = field_accuracy(pred_fields, gt_fields)
 
         st.write(f"### File: {r['file']}")
-        st.write(f"- **CER**: {cer:.4f}")
-        st.write(f"- **WER**: {wer:.4f}")
-        st.write(f"- **Field Accuracy**: {fa*100:.2f}%")
+        st.write(f"- **CER:** {cer:.4f}")
+        st.write(f"- **WER:** {wer:.4f}")
+        st.write(f"- **Field Accuracy:** {fa*100:.2f}%")
         st.write("---")
-
